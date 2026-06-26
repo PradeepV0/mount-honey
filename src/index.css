@@ -1,0 +1,379 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────
+   PREMIUM CUSTOM PROPERTIES
+───────────────────────────────────────────── */
+:root {
+  --honey: #F4B400;
+  --honey-dark: #D89C0D;
+  --honey-light: #F8E7A1;
+  --earth: #2D1F10;
+  --cream: #FAF7F2;
+  --font-display: 'Playfair Display', serif;
+  --font-luxury: 'Cormorant Garamond', serif;
+}
+
+/* ─────────────────────────────────────────────
+   BASE
+───────────────────────────────────────────── */
+html {
+  scroll-behavior: auto; /* Lenis handles smooth scroll */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  background: #FAF7F2;
+  color: #2D1F10;
+  overflow-x: hidden;
+  font-family: 'Inter', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* ─────────────────────────────────────────────
+   LUXURY TYPOGRAPHY
+───────────────────────────────────────────── */
+.luxury-heading {
+  font-family: 'Playfair Display', serif;
+}
+
+.luxury-serif {
+  font-family: 'Cormorant Garamond', serif;
+}
+
+.text-gradient-honey {
+  background: linear-gradient(135deg, #F8E7A1 0%, #F4B400 40%, #D89C0D 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #fff7cc 0%, #F4B400 50%, #a87200 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-honey-glow {
+  text-shadow:
+    0 0 40px rgba(244, 180, 0, 0.5),
+    0 0 80px rgba(244, 180, 0, 0.25);
+}
+
+/* ─────────────────────────────────────────────
+   GLASSMORPHISM
+───────────────────────────────────────────── */
+.glass-honey {
+  background: rgba(255, 230, 140, 0.18);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(244, 180, 0, 0.28);
+}
+
+.glass-dark {
+  background: rgba(45, 31, 16, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(244, 180, 0, 0.18);
+}
+
+.glass-cream {
+  background: rgba(250, 247, 242, 0.82);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(216, 156, 13, 0.18);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 8px 32px rgba(45, 31, 16, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* ─────────────────────────────────────────────
+   BUTTONS
+───────────────────────────────────────────── */
+.btn-honey {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #F4B400, #D89C0D);
+  color: #2D1F10;
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  border-radius: 9999px;
+  padding: 1rem 2rem;
+  box-shadow: 0 8px 32px rgba(244, 180, 0, 0.35);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.btn-honey:hover {
+  box-shadow: 0 12px 48px rgba(244, 180, 0, 0.55);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  border: 1px solid rgba(45, 31, 16, 0.3);
+  color: #2D1F10;
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  border-radius: 9999px;
+  padding: 1rem 2rem;
+  backdrop-filter: blur(8px);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.btn-outline:hover {
+  background: rgba(45, 31, 16, 0.08);
+  border-color: rgba(45, 31, 16, 0.5);
+}
+
+/* ─────────────────────────────────────────────
+   SECTION LABELS
+───────────────────────────────────────────── */
+.section-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: #D89C0D;
+}
+
+/* ─────────────────────────────────────────────
+   HONEYCOMB TEXTURE
+───────────────────────────────────────────── */
+.bg-honeycomb {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 66L0 50V16L28 0l28 16v34zm0-98L0-32v-34L28-82l28 16v34z' fill='none' stroke='%23D89C0D' stroke-width='1.5'/%3E%3C/svg%3E");
+}
+
+/* ─────────────────────────────────────────────
+   SHIMMER
+───────────────────────────────────────────── */
+.shimmer-honey {
+  background: linear-gradient(
+    90deg,
+    rgba(244, 180, 0, 0) 0%,
+    rgba(248, 231, 161, 0.5) 50%,
+    rgba(244, 180, 0, 0) 100%
+  );
+  background-size: 200% auto;
+  animation: shimmer 2.5s linear infinite;
+}
+
+@keyframes shimmer {
+  from { background-position: -200% center; }
+  to { background-position: 200% center; }
+}
+
+/* ─────────────────────────────────────────────
+   BEE ANIMATIONS
+───────────────────────────────────────────── */
+.bee-wing-left {
+  transform-origin: right center;
+  animation: wingFlutter 0.13s ease-in-out infinite alternate;
+}
+
+.bee-wing-right {
+  transform-origin: left center;
+  animation: wingFlutter 0.13s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes wingFlutter {
+  from { transform: scaleX(1) scaleY(1); opacity: 0.85; }
+  to   { transform: scaleX(0.35) scaleY(0.7); opacity: 0.55; }
+}
+
+/* ─────────────────────────────────────────────
+   MARQUEE
+───────────────────────────────────────────── */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ─────────────────────────────────────────────
+   MASONRY GALLERY
+───────────────────────────────────────────── */
+.masonry-grid {
+  columns: 1;
+  column-gap: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .masonry-grid { columns: 2; }
+}
+
+@media (min-width: 1024px) {
+  .masonry-grid { columns: 3; }
+}
+
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 1.25rem;
+  display: block;
+}
+
+/* ─────────────────────────────────────────────
+   HONEY DRIP PATH
+───────────────────────────────────────────── */
+.honey-drip-drop {
+  offset-path: path('M 50 0 C 60 80, 30 130, 50 200 C 70 270, 35 320, 50 400');
+  animation: honeyPathFlow 4s ease-in-out forwards;
+}
+
+@keyframes honeyPathFlow {
+  0%   { offset-distance: 0%; opacity: 1; }
+  85%  { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
+/* ─────────────────────────────────────────────
+   SCROLL SNAP HINT
+───────────────────────────────────────────── */
+.scroll-dot {
+  animation: scrollBounce 1.8s ease-in-out infinite;
+}
+
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50%       { transform: translateY(8px); opacity: 1; }
+}
+
+/* ─────────────────────────────────────────────
+   3D UTILITIES
+───────────────────────────────────────────── */
+.preserve-3d { transform-style: preserve-3d; }
+.perspective-800 { perspective: 800px; }
+.perspective-1000 { perspective: 1000px; }
+.perspective-1200 { perspective: 1200px; }
+
+/* ─────────────────────────────────────────────
+   ORGANIC SHAPES
+───────────────────────────────────────────── */
+.blob-honey {
+  border-radius: 62% 38% 68% 32% / 52% 58% 42% 48%;
+}
+
+.blob-honey-alt {
+  border-radius: 42% 58% 35% 65% / 55% 45% 55% 45%;
+}
+
+/* ─────────────────────────────────────────────
+   FORM FLOATING LABELS
+───────────────────────────────────────────── */
+.float-label-group {
+  position: relative;
+}
+
+.float-label-group input,
+.float-label-group textarea {
+  width: 100%;
+  padding: 1.5rem 1.25rem 0.75rem;
+  background: rgba(250, 247, 242, 0.8);
+  border: 1px solid rgba(45, 31, 16, 0.15);
+  border-radius: 1rem;
+  font-size: 0.9375rem;
+  color: #2D1F10;
+  outline: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  resize: none;
+}
+
+.float-label-group input:focus,
+.float-label-group textarea:focus {
+  border-color: rgba(244, 180, 0, 0.6);
+  box-shadow: 0 0 0 3px rgba(244, 180, 0, 0.12);
+}
+
+.float-label-group label {
+  position: absolute;
+  left: 1.25rem;
+  top: 1.1rem;
+  font-size: 0.875rem;
+  color: rgba(45, 31, 16, 0.5);
+  pointer-events: none;
+  transition: all 0.22s ease;
+  letter-spacing: 0.01em;
+}
+
+.float-label-group input:focus + label,
+.float-label-group input:not(:placeholder-shown) + label,
+.float-label-group textarea:focus + label,
+.float-label-group textarea:not(:placeholder-shown) + label {
+  top: 0.45rem;
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #D89C0D;
+}
+
+/* ─────────────────────────────────────────────
+   ACCORDION
+───────────────────────────────────────────── */
+.accordion-content {
+  overflow: hidden;
+}
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .preserve-3d { transform-style: flat; }
+}
+
+@supports (padding: env(safe-area-inset-bottom)) {
+  footer {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
+
+/* xs breakpoint */
+@media (min-width: 400px) {
+  .xs\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ─────────────────────────────────────────────
+   SELECTION
+───────────────────────────────────────────── */
+::selection {
+  background: rgba(244, 180, 0, 0.3);
+  color: #2D1F10;
+}
+
+/* ─────────────────────────────────────────────
+   LIGHTBOX
+───────────────────────────────────────────── */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(15, 8, 3, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}

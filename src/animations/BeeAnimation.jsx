@@ -1,147 +1,134 @@
-import { useMemo } from 'react'
-import { motion } from 'framer-motion'
+import { useRef, useMemo, useEffect, Suspense } from 'react'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { useGLTF } from '@react-three/drei'
+import * as THREE from 'three'
+import { SkeletonUtils } from 'three-stdlib'
+import honeybeeUrl from '../assests/bees/honeybee/source/honeybee.glb'
 
-/* Single bee SVG */
-function BeeSVG({ size = 1 }) {
-  const s = size
+const BEE_COUNT = 8
+const BEE_SCALE = 0.018
+const Z_LAYERS = [3.0, 1.5, 0.5, 3.5, 1.0, 2.5, 0.0, 2.0]
+
+const lerp = (a, b, t) => a + (b - a) * t
+const smoothstep = (t) => t * t * (3 - 2 * t)
+
+useGLTF.preload(honeybeeUrl)
+
+function BeeInstance({ seed }) {
+  const groupRef    = useRef()
+  const mixerRef    = useRef(null)
+  const materialsRef = useRef([])  // cached once — no per-frame traverse
+
+  const { scene, animations } = useGLTF(honeybeeUrl)
+  const { viewport } = useThree()
+  const clonedScene  = useMemo(() => SkeletonUtils.clone(scene), [scene])
+
+  useEffect(() => {
+    // Cache all materials once so useFrame never traverses the scene graph
+    const mats = []
+    clonedScene.traverse((node) => {
+      if (!node.isMesh || !node.material) return
+      const arr = Array.isArray(node.material) ? node.material : [node.material]
+      arr.forEach((m) => {
+        m.transparent = true
+        mats.push(m)
+      })
+    })
+    materialsRef.current = mats
+
+    if (!animations?.length) return
+    const mixer = new THREE.AnimationMixer(clonedScene)
+    animations.forEach((clip) => mixer.clipAction(clip).play())
+    mixerRef.current = mixer
+    return () => { mixer.stopAllAction(); mixerRef.current = null }
+  }, [clonedScene, animations])
+
+  const path = useMemo(() => {
+    const rng = (n) => Math.abs(Math.sin(seed * 9.3 + n * 137.5))
+    const w = viewport.width
+    const h = viewport.height
+    const zone   = (seed - 1) % 3
+    const zMin   = -h / 2 + zone * (h / 3)
+    const zMax   = zMin + h / 3
+    const sy     = zMin + rng(1) * (zMax - zMin) * 0.85 + (zMax - zMin) * 0.075
+    const sx     = (rng(0) - 0.5) * w * 0.88
+    const baseZ  = Z_LAYERS[(seed - 1) % Z_LAYERS.length]
+    return {
+      xPath: [sx, sx+(rng(2)-0.5)*w*0.40, sx+(rng(3)-0.5)*w*0.38, sx+(rng(4)-0.5)*w*0.40, sx+(rng(5)-0.5)*w*0.36, sx],
+      yPath: [sy, sy+(rng(6)-0.5)*h*0.13, sy+(rng(7)-0.5)*h*0.15, sy+(rng(8)-0.5)*h*0.12, sy+(rng(9)-0.5)*h*0.13, sy],
+      baseZ,
+      duration:   10 + rng(13) * 14,
+      timeOffset: rng(14) * 24,
+      baseOpacity: 0.80 + rng(17) * 0.20,
+    }
+  }, [seed, viewport.width, viewport.height])
+
+  useFrame((state, delta) => {
+    if (!groupRef.current) return
+    mixerRef.current?.update(delta)
+
+    const elapsed = state.clock.elapsedTime + path.timeOffset
+    const t = ((elapsed % path.duration) / path.duration + 1) % 1
+    const segs = path.xPath.length - 1
+    const seg  = Math.min(Math.floor(t * segs), segs - 1)
+    const segT = smoothstep(t * segs - seg)
+
+    const x = lerp(path.xPath[seg], path.xPath[seg + 1], segT)
+    const y = lerp(path.yPath[seg], path.yPath[seg + 1], segT)
+    const bob    = Math.sin(state.clock.elapsedTime * 3.5 + seed) * 0.05
+    const zDrift = Math.sin(state.clock.elapsedTime * 0.6 + seed * 1.3) * 0.4
+
+    groupRef.current.position.set(x, y + bob, path.baseZ + zDrift)
+
+    const dx = path.xPath[Math.min(seg + 1, segs)] - path.xPath[seg]
+    if (Math.abs(dx) > 0.001) {
+      const targetY = dx > 0 ? 0 : Math.PI
+      groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetY, 0.06)
+    }
+
+    // Update opacity — iterates cached array only, no traverse
+    const fadeZone = 0.07
+    let alpha = 1
+    if (t < fadeZone) alpha = t / fadeZone
+    else if (t > 1 - fadeZone) alpha = (1 - t) / fadeZone
+    const opacity = alpha * path.baseOpacity
+    for (let i = 0; i < materialsRef.current.length; i++) {
+      materialsRef.current[i].opacity = opacity
+    }
+  })
+
   return (
-    <svg
-      viewBox="0 0 48 32"
-      width={48 * s}
-      height={32 * s}
-      fill="none"
-      style={{ overflow: 'visible' }}
-    >
-      {/* Left wing */}
-      <ellipse
-        cx="14"
-        cy="9"
-        rx="12"
-        ry="7"
-        fill="rgba(200,230,255,0.55)"
-        stroke="rgba(150,200,255,0.3)"
-        strokeWidth="0.5"
-        className="bee-wing-left"
-      />
-      {/* Right wing */}
-      <ellipse
-        cx="34"
-        cy="9"
-        rx="12"
-        ry="7"
-        fill="rgba(200,230,255,0.55)"
-        stroke="rgba(150,200,255,0.3)"
-        strokeWidth="0.5"
-        className="bee-wing-right"
-      />
-      {/* Body */}
-      <ellipse cx="24" cy="19" rx="10" ry="8" fill="#F4B400" />
-      {/* Body stripes */}
-      <rect x="14.5" y="15" width="19" height="3.5" rx="1.5" fill="#2D1F10" opacity="0.65" />
-      <rect x="15.5" y="20" width="17" height="3" rx="1.5" fill="#2D1F10" opacity="0.45" />
-      {/* Head */}
-      <circle cx="24" cy="11" r="5.5" fill="#2D1F10" />
-      {/* Eyes */}
-      <circle cx="22" cy="10" r="1.5" fill="white" />
-      <circle cx="26" cy="10" r="1.5" fill="white" />
-      <circle cx="22.5" cy="10.2" r="0.6" fill="#1A0D06" />
-      <circle cx="26.5" cy="10.2" r="0.6" fill="#1A0D06" />
-      {/* Antennae */}
-      <path d="M22,6 C20,3 17,1 15,0" stroke="#2D1F10" strokeWidth="0.8" strokeLinecap="round" />
-      <path d="M26,6 C28,3 31,1 33,0" stroke="#2D1F10" strokeWidth="0.8" strokeLinecap="round" />
-      <circle cx="14.5" cy="0.2" r="1.2" fill="#2D1F10" />
-      <circle cx="33.5" cy="0.2" r="1.2" fill="#2D1F10" />
-      {/* Stinger */}
-      <path d="M24,27 L24,31" stroke="#D89C0D" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
+    <group ref={groupRef} scale={BEE_SCALE}>
+      <primitive object={clonedScene} />
+    </group>
   )
 }
 
-/* Generate unique flight keyframes for each bee */
-function makeFlightPath(seed) {
-  const w = typeof window !== 'undefined' ? window.innerWidth  : 1200
-  const h = typeof window !== 'undefined' ? window.innerHeight : 800
-
-  // Deterministic pseudo-random from seed
-  const rng = (n) => Math.abs(Math.sin(seed * 9.3 + n * 137.5))
-
-  const startX  = rng(0) * w
-  const startY  = rng(1) * h * 0.8
-
-  return {
-    startX,
-    startY,
-    xPath: [
-      startX,
-      startX + (rng(2) - 0.5) * 400,
-      startX + (rng(3) - 0.5) * 350,
-      startX + (rng(4) - 0.5) * 450,
-      startX + (rng(5) - 0.5) * 300,
-      startX,
-    ],
-    yPath: [
-      startY,
-      startY + (rng(6) - 0.5) * 200,
-      startY + (rng(7) - 0.5) * 250,
-      startY + (rng(8) - 0.5) * 180,
-      startY + (rng(9) - 0.5) * 220,
-      startY,
-    ],
-    rotatePath: [0, rng(10) * 30 - 15, rng(11) * 40 - 20, rng(12) * 30 - 15, 0],
-    duration: 10 + rng(13) * 14,
-    delay: rng(14) * -12,
-    size: 0.45 + rng(15) * 0.65,
-    zIndex: Math.floor(rng(16) * 50) + 5,
-    opacity: 0.5 + rng(17) * 0.5,
-  }
+function BeesScene() {
+  return (
+    <>
+      <ambientLight intensity={1.8} color="#FFF5DC" />
+      <directionalLight position={[3, 5, 3]} intensity={2.5} color="#FFD700" />
+      <pointLight position={[-4, 2, 2]} intensity={0.8} color="#F4B400" />
+      {Array.from({ length: BEE_COUNT }, (_, i) => (
+        <Suspense key={i} fallback={null}>
+          <BeeInstance seed={i + 1} />
+        </Suspense>
+      ))}
+    </>
+  )
 }
-
-const BEE_COUNT = 10
 
 export default function BeeAnimation() {
-  const bees = useMemo(
-    () => Array.from({ length: BEE_COUNT }, (_, i) => ({ id: i, ...makeFlightPath(i + 1) })),
-    []
-  )
-
   return (
     <div className="pointer-events-none fixed inset-0 overflow-hidden" style={{ zIndex: 15 }}>
-      {bees.map((bee) => (
-        <motion.div
-          key={bee.id}
-          initial={{ x: bee.startX, y: bee.startY, opacity: 0 }}
-          animate={{
-            x: bee.xPath,
-            y: bee.yPath,
-            rotate: bee.rotatePath,
-            opacity: [0, bee.opacity, bee.opacity, bee.opacity, 0],
-          }}
-          transition={{
-            duration: bee.duration,
-            repeat: Infinity,
-            repeatType: 'loop',
-            delay: bee.delay,
-            ease: 'easeInOut',
-            times: [0, 0.08, 0.5, 0.92, 1],
-          }}
-          style={{
-            position: 'absolute',
-            zIndex: bee.zIndex,
-            willChange: 'transform',
-          }}
-        >
-          <motion.div
-            animate={{ y: [0, -4, 0] }}
-            transition={{
-              duration: 1.8 + (bee.id % 3) * 0.4,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-          >
-            <BeeSVG size={bee.size} />
-          </motion.div>
-        </motion.div>
-      ))}
+      <Canvas
+        camera={{ position: [0, 0, 8], fov: 60 }}
+        gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
+        dpr={1}
+      >
+        <BeesScene />
+      </Canvas>
     </div>
   )
 }

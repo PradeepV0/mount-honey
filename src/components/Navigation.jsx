@@ -27,9 +27,15 @@ export default function Navigation() {
         transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled
-            ? 'glass-honey shadow-[0_4px_30px_rgba(244,180,0,0.15)]'
+            ? 'shadow-[0_4px_30px_rgba(0,0,0,0.5)]'
             : 'bg-transparent'
         }`}
+        style={scrolled ? {
+          background: 'rgba(10,5,2,0.82)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderBottom: '1px solid rgba(244,180,0,0.1)',
+        } : {}}
       >
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-8 lg:px-10">
           {/* Logo */}
@@ -37,11 +43,7 @@ export default function Navigation() {
             <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#F4B400] shadow-[0_4px_12px_rgba(244,180,0,0.4)]">
               <HexLogo />
             </div>
-            <span
-              className={`text-lg font-extrabold tracking-tight transition-colors duration-300 ${
-                scrolled ? 'text-[#2D1F10]' : 'text-white'
-              }`}
-            >
+            <span className="text-lg font-extrabold tracking-tight text-[#FDF3E1]">
               Mount<span style={{ color: '#F4B400' }}>Honey</span>
             </span>
           </a>
@@ -55,7 +57,7 @@ export default function Navigation() {
                 className={`relative transition-colors duration-200
                   after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-0
                   after:bg-[#F4B400] after:transition-all after:duration-300 hover:after:w-full
-                  ${scrolled ? 'text-[#2D1F10]/75 hover:text-[#2D1F10]' : 'text-white/75 hover:text-white'}`}
+                  text-[#FDF3E1]/70 hover:text-[#FDF3E1]`}
               >
                 {link.label}
               </a>
@@ -75,11 +77,7 @@ export default function Navigation() {
             onClick={() => setMenuOpen((v) => !v)}
             aria-label="Toggle menu"
             aria-expanded={menuOpen}
-            className={`flex h-10 w-10 items-center justify-center rounded-xl border transition md:hidden ${
-              scrolled
-                ? 'border-[#2D1F10]/20 text-[#2D1F10]'
-                : 'border-white/30 text-white'
-            }`}
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#FDF3E1]/20 text-[#FDF3E1] transition md:hidden"
           >
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
               {menuOpen ? (
@@ -113,16 +111,19 @@ export default function Navigation() {
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
               className="fixed inset-x-4 top-4 z-50 overflow-hidden rounded-3xl md:hidden"
               style={{
-                background: 'linear-gradient(160deg, #FFF8E7 0%, #FAF7F2 100%)',
-                boxShadow: '0 20px 60px rgba(45,31,16,0.3)',
-                border: '1px solid rgba(244,180,0,0.25)',
+                background: 'rgba(10,5,2,0.95)',
+                backdropFilter: 'blur(24px)',
+                WebkitBackdropFilter: 'blur(24px)',
+                boxShadow: '0 20px 60px rgba(0,0,0,0.7)',
+                border: '1px solid rgba(244,180,0,0.15)',
               }}
             >
               <div className="flex items-center justify-between border-b border-[#F4B400]/15 px-5 py-4">
-                <span className="text-xl font-extrabold tracking-tight text-[#2D1F10]">
+                <span className="text-xl font-extrabold tracking-tight text-[#FDF3E1]">
                   Mount<span style={{ color: '#F4B400' }}>Honey</span>
                 </span>
-                <button onClick={close} className="flex h-8 w-8 items-center justify-center rounded-full bg-[#2D1F10]/8 text-[#2D1F10]">
+                <button onClick={close} className="flex h-8 w-8 items-center justify-center rounded-full text-[#FDF3E1]/60"
+                  style={{ background: 'rgba(244,180,0,0.1)', border: '1px solid rgba(244,180,0,0.2)' }}>
                   <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                     <line x1="4" y1="4" x2="20" y2="20" /><line x1="20" y1="4" x2="4" y2="20" />
                   </svg>
@@ -137,7 +138,7 @@ export default function Navigation() {
                     initial={{ opacity: 0, x: -12 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.05 + i * 0.05, duration: 0.3 }}
-                    className="rounded-xl px-4 py-3 text-sm font-semibold text-[#2D1F10]/80 transition hover:bg-[#F4B400]/12 hover:text-[#2D1F10]"
+                    className="rounded-xl px-4 py-3 text-sm font-semibold text-[#FDF3E1]/70 transition hover:bg-[#F4B400]/10 hover:text-[#FDF3E1]"
                   >
                     {link.label}
                   </motion.a>

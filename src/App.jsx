@@ -13,7 +13,7 @@ import BeeAnimation    from './animations/BeeAnimation'
 
 export default function App() {
   return (
-    <div className="relative overflow-x-hidden bg-[#FAF7F2] text-[#2D1F10]">
+    <div className="relative overflow-x-hidden bg-[#0F0702] text-[#FDF3E1]">
       {/* Global bee swarm — floats above all sections */}
       <BeeAnimation />
 

@@ -34,14 +34,14 @@ export default function Footer() {
       className="relative overflow-hidden"
       style={{ background: 'linear-gradient(160deg, #1A0D06 0%, #2D1F10 50%, #1A0D06 100%)' }}
     >
-      {/* Honey drip top edge */}
+      {/* Amber drip divider from previous dark section */}
       <div className="absolute top-0 left-0 right-0 z-10">
         <svg viewBox="0 0 1440 80" preserveAspectRatio="none" className="w-full" style={{ height: '80px', display: 'block' }}>
-          <path d="M0,40 Q180,80 360,45 Q540,10 720,48 Q900,86 1080,45 Q1260,4 1440,40 L1440,0 L0,0 Z" fill="#FAF7F2" />
-          <ellipse cx="215" cy="46" rx="9" ry="18" fill="#FAF7F2" />
-          <ellipse cx="540" cy="50" rx="7" ry="15" fill="#FAF7F2" />
-          <ellipse cx="830" cy="54" rx="11" ry="20" fill="#FAF7F2" />
-          <ellipse cx="1130" cy="44" rx="8" ry="16" fill="#FAF7F2" />
+          <path d="M0,40 Q180,80 360,45 Q540,10 720,48 Q900,86 1080,45 Q1260,4 1440,40 L1440,0 L0,0 Z" fill="#071209" />
+          <ellipse cx="215" cy="46" rx="9" ry="18" fill="#071209" />
+          <ellipse cx="540" cy="50" rx="7" ry="15" fill="#071209" />
+          <ellipse cx="830" cy="54" rx="11" ry="20" fill="#071209" />
+          <ellipse cx="1130" cy="44" rx="8" ry="16" fill="#071209" />
         </svg>
       </div>
 
